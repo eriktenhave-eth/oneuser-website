@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500&family=Barlow+Condensed:wght@300;400;700;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --black: #080808;
+    --white: #F2F0EB;
+    --red: #E8001D;
+    --red-dark: #9A0012;
+    --grey: #1A1A1A;
+    --mid: #333;
+    --muted: #888;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'Barlow Condensed', sans-serif;
+    overflow-x: hidden;
+    cursor: crosshair;
+  }
+
+  /* TICKER */
+  .ticker {
+    background: var(--red);
+    padding: 8px 0;
+    overflow: hidden;
+    white-space: nowrap;
+    position: relative;
+    z-index: 10;
+  }
+  .ticker-inner {
+    display: inline-flex;
+    gap: 0;
+    animation: tick 20s linear infinite;
+  }
+  .ticker span {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #fff;
+    padding: 0 40px;
+  }
+  .ticker span::after { content: '//'; margin-left: 40px; opacity: 0.5; }
+  @keyframes tick { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+  /* NAV */
+  nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    border-bottom: 1px solid var(--mid);
+    position: sticky;
+    top: 0;
+    background: rgba(8,8,8,0.95);
+    backdrop-filter: blur(10px);
+    z-index: 100;
+  }
+  .logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 0.05em;
+    color: var(--white);
+  }
+  .logo span { color: var(--red); }
+  .nav-links {
+    display: flex;
+    gap: 32px;
+    list-style: none;
+  }
+  .nav-links a {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--red); }
+  .nav-cta {
+    background: var(--red);
+    color: #fff !important;
+    padding: 8px 20px;
+    font-family: 'DM Mono', monospace !important;
+    font-size: 11px !important;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+  .nav-cta:hover { background: var(--red-dark) !important; color: #fff !important; }
+
+  /* HERO */
+  .hero {
+    min-height: 90vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-bottom: 1px solid var(--mid);
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 70% 50%, rgba(232,0,29,0.08) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  .hero-left {
+    padding: 80px 40px 80px 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-right: 1px solid var(--mid);
+    position: relative;
+  }
+  .hero-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .hero-tag::before {
+    content: '';
+    width: 24px;
+    height: 1px;
+    background: var(--red);
+  }
+  .hero-headline {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(72px, 9vw, 140px);
+    line-height: 0.9;
+    color: var(--white);
+    letter-spacing: 0.02em;
+  }
+  .hero-headline .strike {
+    color: var(--mid);
+    text-decoration: line-through;
+    text-decoration-color: var(--red);
+    text-decoration-thickness: 4px;
+  }
+  .hero-headline .accent { color: var(--red); }
+  .hero-sub {
+    margin-top: 32px;
+    font-size: 18px;
+    font-weight: 300;
+    color: var(--muted);
+    line-height: 1.5;
+    max-width: 480px;
+    letter-spacing: 0.02em;
+  }
+  .hero-sub strong { color: var(--white); font-weight: 700; }
+  .hero-actions {
+    display: flex;
+    gap: 16px;
+    margin-top: 48px;
+    align-items: center;
+  }
+  .btn-primary {
+    background: var(--red);
+    color: #fff;
+    padding: 16px 40px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    letter-spacing: 0.1em;
+    text-decoration: none;
+    border: none;
+    cursor: crosshair;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-primary:hover { background: #fff; color: var(--red); }
+  .btn-ghost {
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-bottom: 1px solid var(--mid);
+    padding-bottom: 2px;
+    transition: color 0.2s;
+  }
+  .btn-ghost:hover { color: var(--white); border-color: var(--white); }
+
+  .hero-right {
+    padding: 60px 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0;
+    position: relative;
+  }
+
+  /* AGENT STACK */
+  .agent-stack { display: flex; flex-direction: column; gap: 2px; }
+  .agent-card {
+    background: var(--grey);
+    border: 1px solid var(--mid);
+    padding: 18px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s;
+    animation: slideIn 0.6s ease forwards;
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  .agent-card:nth-child(1) { animation-delay: 0.1s; }
+  .agent-card:nth-child(2) { animation-delay: 0.2s; }
+  .agent-card:nth-child(3) { animation-delay: 0.3s; }
+  .agent-card:nth-child(4) { animation-delay: 0.4s; }
+  .agent-card:nth-child(5) { animation-delay: 0.5s; }
+  .agent-card:nth-child(6) { animation-delay: 0.6s; }
+  @keyframes slideIn {
+    to { opacity: 1; transform: translateX(0); }
+  }
+  .agent-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--red);
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .agent-card:hover { border-color: var(--red); background: #111; }
+  .agent-card:hover::before { opacity: 1; }
+  .agent-card.active { border-color: var(--red); background: #120000; }
+  .agent-card.active::before { opacity: 1; }
+  .agent-info { display: flex; align-items: center; gap: 16px; }
+  .agent-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--red);
+    animation: pulse 2s infinite;
+    flex-shrink: 0;
+  }
+  .agent-card:not(.active) .agent-dot { background: var(--muted); animation: none; }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(232,0,29,0.4); }
+    50% { opacity: 0.8; box-shadow: 0 0 0 6px rgba(232,0,29,0); }
+  }
+  .agent-name {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    color: var(--white);
+  }
+  .agent-role {
+    font-size: 13px;
+    font-weight: 300;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+  .agent-status {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+  .agent-card.active .agent-status { color: var(--red); }
+  .agent-card:not(.active) .agent-status { color: var(--muted); }
+  .stack-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+
+  /* STAT ROW */
+  .stat-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border-top: 1px solid var(--mid);
+    border-bottom: 1px solid var(--mid);
+    margin: 0;
+  }
+  .stat {
+    padding: 48px 40px;
+    border-right: 1px solid var(--mid);
+    position: relative;
+    overflow: hidden;
+  }
+  .stat:last-child { border-right: none; }
+  .stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 80px;
+    line-height: 1;
+    color: var(--white);
+    letter-spacing: 0.02em;
+  }
+  .stat-num span { color: var(--red); }
+  .stat-label {
+    font-size: 16px;
+    font-weight: 300;
+    color: var(--muted);
+    margin-top: 8px;
+    letter-spacing: 0.05em;
+  }
+
+  /* PHILOSOPHY */
+  .philosophy {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    padding: 80px 40px;
+    gap: 80px;
+    border-bottom: 1px solid var(--mid);
+    align-items: start;
+  }
+  .phil-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--red);
+    padding-top: 8px;
+  }
+  .phil-content {}
+  .phil-headline {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(40px, 5vw, 72px);
+    line-height: 0.95;
+    margin-bottom: 32px;
+    color: var(--white);
+  }
+  .phil-body {
+    font-size: 18px;
+    font-weight: 300;
+    line-height: 1.6;
+    color: var(--muted);
+    margin-bottom: 20px;
+    letter-spacing: 0.02em;
+  }
+  .phil-body strong { color: var(--white); font-weight: 700; }
+
+  /* AGENT TYPES */
+  .agents-section {
+    padding: 80px 40px;
+    border-bottom: 1px solid var(--mid);
+  }
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 48px;
+    border-bottom: 1px solid var(--mid);
+    padding-bottom: 32px;
+  }
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(36px, 4vw, 60px);
+    line-height: 1;
+    color: var(--white);
+  }
+  .section-count {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+  }
+
+  .agents-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+  }
+  .agent-type {
+    background: var(--grey);
+    border: 1px solid var(--mid);
+    padding: 32px;
+    transition: all 0.25s;
+    cursor: crosshair;
+    position: relative;
+    overflow: hidden;
+  }
+  .agent-type::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--red);
+    transform: scaleX(0);
+    transition: transform 0.3s;
+    transform-origin: left;
+  }
+  .agent-type:hover { background: #111; border-color: #444; }
+  .agent-type:hover::after { transform: scaleX(1); }
+  .type-id {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    color: var(--red);
+    margin-bottom: 16px;
+  }
+  .type-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    line-height: 1;
+    color: var(--white);
+    margin-bottom: 8px;
+    letter-spacing: 0.05em;
+  }
+  .type-replaces {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.15em;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+  }
+  .type-replaces strong {
+    color: var(--red);
+    text-decoration: line-through;
+    text-decoration-thickness: 1px;
+  }
+  .type-desc {
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--muted);
+    line-height: 1.5;
+    letter-spacing: 0.02em;
+  }
+
+  /* PRICING */
+  .pricing {
+    padding: 80px 40px;
+    border-bottom: 1px solid var(--mid);
+    background: var(--grey);
+  }
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    margin-top: 48px;
+  }
+  .price-card {
+    background: var(--black);
+    border: 1px solid var(--mid);
+    padding: 40px 32px;
+    position: relative;
+    transition: all 0.25s;
+  }
+  .price-card.featured {
+    border-color: var(--red);
+    background: #080000;
+  }
+  .price-card.featured::before {
+    content: 'MOST LETHAL';
+    position: absolute;
+    top: -1px; left: 50%;
+    transform: translateX(-50%);
+    background: var(--red);
+    color: #fff;
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    padding: 4px 16px;
+  }
+  .price-tier {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 24px;
+  }
+  .price-amount {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 72px;
+    line-height: 1;
+    color: var(--white);
+  }
+  .price-amount sup {
+    font-size: 28px;
+    vertical-align: top;
+    margin-top: 12px;
+    display: inline-block;
+    color: var(--muted);
+  }
+  .price-period {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.2em;
+    margin-bottom: 32px;
+  }
+  .price-agents {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 24px;
+    color: var(--red);
+    margin-bottom: 24px;
+    letter-spacing: 0.05em;
+  }
+  .price-features { list-style: none; }
+  .price-features li {
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--muted);
+    padding: 10px 0;
+    border-bottom: 1px solid #222;
+    letter-spacing: 0.05em;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+  .price-features li::before {
+    content: '—';
+    color: var(--red);
+    font-family: 'DM Mono', monospace;
+    flex-shrink: 0;
+  }
+  .price-btn {
+    display: block;
+    margin-top: 32px;
+    text-align: center;
+    padding: 14px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    letter-spacing: 0.1em;
+    text-decoration: none;
+    transition: all 0.2s;
+    cursor: crosshair;
+  }
+  .price-card:not(.featured) .price-btn {
+    border: 1px solid var(--mid);
+    color: var(--muted);
+  }
+  .price-card:not(.featured) .price-btn:hover {
+    border-color: var(--white);
+    color: var(--white);
+  }
+  .price-card.featured .price-btn {
+    background: var(--red);
+    color: #fff;
+  }
+  .price-card.featured .price-btn:hover { background: #fff; color: var(--red); }
+
+  /* MANIFESTO */
+  .manifesto {
+    padding: 120px 40px;
+    border-bottom: 1px solid var(--mid);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .manifesto::before {
+    content: 'OBSOLETE';
+    position: absolute;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 300px;
+    color: #111;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .manifesto-content { position: relative; z-index: 1; max-width: 800px; margin: 0 auto; }
+  .manifesto-headline {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(48px, 7vw, 100px);
+    line-height: 0.95;
+    color: var(--white);
+    margin-bottom: 40px;
+  }
+  .manifesto-headline em { color: var(--red); font-style: normal; }
+  .manifesto-copy {
+    font-size: 20px;
+    font-weight: 300;
+    color: var(--muted);
+    line-height: 1.7;
+    margin-bottom: 56px;
+    letter-spacing: 0.02em;
+  }
+  .manifesto-copy strong { color: var(--white); }
+
+  /* CTA FOOTER */
+  .cta-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-bottom: 1px solid var(--mid);
+  }
+  .cta-left {
+    padding: 80px 40px;
+    border-right: 1px solid var(--mid);
+  }
+  .cta-left h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(40px, 5vw, 72px);
+    line-height: 0.95;
+    margin-bottom: 24px;
+  }
+  .cta-left h2 em { color: var(--red); font-style: normal; }
+  .cta-form { display: flex; flex-direction: column; gap: 2px; margin-top: 32px; }
+  .cta-input {
+    background: var(--grey);
+    border: 1px solid var(--mid);
+    padding: 16px 20px;
+    color: var(--white);
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .cta-input::placeholder { color: var(--muted); }
+  .cta-input:focus { border-color: var(--red); }
+  .cta-submit {
+    background: var(--red);
+    border: none;
+    padding: 20px;
+    color: #fff;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 0.1em;
+    cursor: crosshair;
+    transition: background 0.2s;
+    margin-top: 2px;
+  }
+  .cta-submit:hover { background: var(--white); color: var(--red); }
+  .cta-right {
+    padding: 80px 40px;
+    background: var(--red);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .cta-right-headline {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(36px, 4vw, 60px);
+    line-height: 0.95;
+    color: #fff;
+    margin-bottom: 24px;
+  }
+  .guarantees { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+  .guarantees li {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.75);
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+  .guarantees li::before {
+    content: '✓';
+    color: #fff;
+    font-size: 14px;
+  }
+
+  /* FOOTER */
+  footer {
+    padding: 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .footer-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    letter-spacing: 0.05em;
+  }
+  .footer-logo span { color: var(--red); }
+  .footer-copy {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  /* SCROLL ANIMATIONS */
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
+</head>
+<body>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-inner">
+    <span>Your staff is a liability</span>
+    <span>AI agents never call in sick</span>
+    <span>One user. Infinite capacity</span>
+    <span>The workforce has been automated</span>
+    <span>Deploy in 48 hours</span>
+    <span>Your staff is a liability</span>
+    <span>AI agents never call in sick</span>
+    <span>One user. Infinite capacity</span>
+    <span>The workforce has been automated</span>
+    <span>Deploy in 48 hours</span>
+    <span>Your staff is a liability</span>
+    <span>AI agents never call in sick</span>
+    <span>One user. Infinite capacity</span>
+    <span>The workforce has been automated</span>
+    <span>Deploy in 48 hours</span>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">ONE<span>USER</span>.COM</div>
+  <ul class="nav-links">
+    <li><a href="#">Agents</a></li>
+    <li><a href="#">Pricing</a></li>
+    <li><a href="#">Case Studies</a></li>
+    <li><a href="#">Manifesto</a></li>
+    <li><a href="#" class="nav-cta">Deploy Now</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-tag">The AI Agent Factory</div>
+    <h1 class="hero-headline">
+      <span class="strike">YOUR<br>TEAM</span><br>
+      <span class="accent">REPLACED.</span>
+    </h1>
+    <p class="hero-sub">
+      We build <strong>AI Agents that do the jobs your staff does</strong> — faster, cheaper, and without the drama. oneuser.com is the only factory that ships production-ready agents in <strong>48 hours</strong>.
+    </p>
+    <div class="hero-actions">
+      <a href="#" class="btn-primary">Build My Agent</a>
+      <a href="#" class="btn-ghost">Watch the Takeover →</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="stack-label">// Live Agent Deployment Console</div>
+    <div class="agent-stack">
+      <div class="agent-card active">
+        <div class="agent-info">
+          <div class="agent-dot"></div>
+          <div>
+            <div class="agent-name">AGT-001 / SALES-PRO</div>
+            <div class="agent-role">Replaced: 4-person outbound sales team</div>
+          </div>
+        </div>
+        <div class="agent-status">Active</div>
+      </div>
+      <div class="agent-card active">
+        <div class="agent-info">
+          <div class="agent-dot"></div>
+          <div>
+            <div class="agent-name">AGT-002 / SUPPORT-24</div>
+            <div class="agent-role">Replaced: 8-person customer support team</div>
+          </div>
+        </div>
+        <div class="agent-status">Active</div>
+      </div>
+      <div class="agent-card active">
+        <div class="agent-info">
+          <div class="agent-dot"></div>
+          <div>
+            <div class="agent-name">AGT-003 / FINANCE-OPS</div>
+            <div class="agent-role">Replaced: 2 finance officers</div>
+          </div>
+        </div>
+        <div class="agent-status">Active</div>
+      </div>
+      <div class="agent-card">
+        <div class="agent-info">
+          <div class="agent-dot"></div>
+          <div>
+            <div class="agent-name">AGT-004 / CONTENT-MILL</div>
+            <div class="agent-role">Replaced: 6-person marketing team</div>
+          </div>
+        </div>
+        <div class="agent-status">Deploying...</div>
+      </div>
+      <div class="agent-card">
+        <div class="agent-info">
+          <div class="agent-dot"></div>
+          <div>
+            <div class="agent-name">AGT-005 / HR-ZERO</div>
+            <div class="agent-role">Replaced: HR department (all of it)</div>
+          </div>
+        </div>
+        <div class="agent-status">Queued</div>
+      </div>
+      <div class="agent-card">
+        <div class="agent-info">
+          <div class="agent-dot"></div>
+          <div>
+            <div class="agent-name">AGT-006 / OPS-CORE</div>
+            <div class="agent-role">Replaced: Operations manager + team</div>
+          </div>
+        </div>
+        <div class="agent-status">Queued</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stat-row reveal">
+  <div class="stat">
+    <div class="stat-num">97<span>%</span></div>
+    <div class="stat-label">Cost reduction vs. human equivalent</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">24<span>/7</span></div>
+    <div class="stat-label">No sick days. No holidays. No excuses.</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">48<span>h</span></div>
+    <div class="stat-label">From brief to live deployed agent</div>
+  </div>
+</div>
+
+<!-- PHILOSOPHY -->
+<section class="philosophy reveal">
+  <div class="phil-label">// Our Philosophy</div>
+  <div class="phil-content">
+    <h2 class="phil-headline">THE WORKFORCE REVOLUTION IS HERE.<br>BE THE ONE WHO PULLS THE TRIGGER.</h2>
+    <p class="phil-body">
+      The businesses that thrive in the next decade won't be the ones that <strong>manage the most people</strong> — they'll be the ones that manage the <strong>fewest</strong>. Every headcount is a salary, a lawsuit waiting to happen, a performance review, a churn statistic.
+    </p>
+    <p class="phil-body">
+      <strong>oneuser.com</strong> builds AI Agents purpose-engineered to absorb entire departments. Not "assist" your team. Not "augment" your workflow. <strong>Replace it.</strong> We call this the One User model: one human at the top, an army of agents underneath, and a cost base your competitors can't survive.
+    </p>
+  </div>
+</section>
+
+<!-- AGENT CATALOGUE -->
+<section class="agents-section reveal">
+  <div class="section-header">
+    <h2 class="section-title">The Agent Factory Catalogue</h2>
+    <div class="section-count">// 18 AGENT TYPES &amp; GROWING</div>
+  </div>
+  <div class="agents-grid">
+    <div class="agent-type">
+      <div class="type-id">AGT-001</div>
+      <div class="type-name">Sales Terminator</div>
+      <div class="type-replaces">Replaces: <strong>Sales team (SDRs, AEs)</strong></div>
+      <div class="type-desc">Prospecting, outreach, qualification, follow-up. Books meetings, sends proposals, closes deals. Never misses a follow-up. Never asks for commission.</div>
+    </div>
+    <div class="agent-type">
+      <div class="type-id">AGT-002</div>
+      <div class="type-name">Support Annihilator</div>
+      <div class="type-replaces">Replaces: <strong>Customer Support dept.</strong></div>
+      <div class="type-desc">Resolves tickets, handles complaints, processes refunds, escalates edge cases. 1ms response time. Infinite patience. Infinite shifts.</div>
+    </div>
+    <div class="agent-type">
+      <div class="type-id">AGT-003</div>
+      <div class="type-name">Content Destroyer</div>
+      <div class="type-replaces">Replaces: <strong>Marketing &amp; content teams</strong></div>
+      <div class="type-desc">Writes copy, builds campaigns, manages social, edits video scripts, reports on analytics, A/B tests. A full agency in a single agent.</div>
+    </div>
+    <div class="agent-type">
+      <div class="type-id">AGT-004</div>
+      <div class="type-name">Finance Obliterator</div>
+      <div class="type-replaces">Replaces: <strong>Finance &amp; accounting</strong></div>
+      <div class="type-desc">Invoicing, reconciliation, reporting, forecasting, compliance flagging. Runs your books without a single spreadsheet error.</div>
+    </div>
+    <div class="agent-type">
+      <div class="type-id">AGT-005</div>
+      <div class="type-name">Ops Executioner</div>
+      <div class="type-replaces">Replaces: <strong>Operations &amp; project management</strong></div>
+      <div class="type-desc">Coordinates workflows, chases dependencies, manages vendors, builds reports. Keeps every project on track without a single standup meeting.</div>
+    </div>
+    <div class="agent-type">
+      <div class="type-id">AGT-006</div>
+      <div class="type-name">HR Eliminator</div>
+      <div class="type-replaces">Replaces: <strong>HR department</strong></div>
+      <div class="type-desc">Onboarding, policy enforcement, performance tracking, offboarding. The irony of an AI handling HR is not lost on us. It delights us.</div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing reveal">
+  <div class="section-header">
+    <h2 class="section-title">Pick Your Arsenal</h2>
+    <div class="section-count">// CANCEL ANYTIME. YOUR STAFF WON'T.</div>
+  </div>
+  <div class="pricing-grid">
+    <div class="price-card">
+      <div class="price-tier">Starter // Solo Operator</div>
+      <div class="price-amount"><sup>£</sup>499</div>
+      <div class="price-period">/ month</div>
+      <div class="price-agents">3 Agents Deployed</div>
+      <ul class="price-features">
+        <li>Up to 3 custom AI agents</li>
+        <li>Standard integrations (Slack, email, CRM)</li>
+        <li>48hr deployment SLA</li>
+        <li>Monthly performance report</li>
+      </ul>
+      <a href="#" class="price-btn">Start Replacing</a>
+    </div>
+    <div class="price-card featured">
+      <div class="price-tier">Growth // Department Killer</div>
+      <div class="price-amount"><sup>£</sup>1,999</div>
+      <div class="price-period">/ month</div>
+      <div class="price-agents">10 Agents Deployed</div>
+      <ul class="price-features">
+        <li>Up to 10 custom AI agents</li>
+        <li>Full integration suite + API access</li>
+        <li>24hr deployment SLA</li>
+        <li>Real-time dashboard + analytics</li>
+        <li>Agent optimisation (monthly)</li>
+        <li>Dedicated account agent</li>
+      </ul>
+      <a href="#" class="price-btn">Deploy the Army</a>
+    </div>
+    <div class="price-card">
+      <div class="price-tier">Enterprise // Full Takeover</div>
+      <div class="price-amount">BESPOKE</div>
+      <div class="price-period">/ all-in</div>
+      <div class="price-agents">Unlimited Agents</div>
+      <ul class="price-features">
+        <li>Unlimited agents, unlimited scope</li>
+        <li>End-to-end department migration</li>
+        <li>On-site agent architecture workshops</li>
+        <li>Dedicated engineering team</li>
+        <li>Custom model fine-tuning</li>
+        <li>Board-level reporting</li>
+      </ul>
+      <a href="#" class="price-btn">Speak to Command</a>
+    </div>
+  </div>
+</section>
+
+<!-- MANIFESTO -->
+<section class="manifesto reveal">
+  <div class="manifesto-content">
+    <h2 class="manifesto-headline">YOUR COMPETITORS ARE ALREADY<br><em>PULLING THE TRIGGER.</em><br>WHAT ARE YOU WAITING FOR?</h2>
+    <p class="manifesto-copy">
+      The question isn't whether AI will replace jobs in your industry. It already is. The only question is whether it's <strong>your agents doing the replacing</strong>, or someone else's agents replacing yours. oneuser.com exists for the leaders who refuse to be the cautionary tale.
+    </p>
+    <a href="#" class="btn-primary" style="font-size:22px; padding:20px 60px;">Start the Takeover</a>
+  </div>
+</section>
+
+<!-- CTA FORM -->
+<section class="cta-section reveal">
+  <div class="cta-left">
+    <div class="hero-tag" style="margin-bottom:16px;">// Deploy in 48 Hours</div>
+    <h2>READY TO <em>MAKE YOUR STAFF OBSOLETE?</em></h2>
+    <div class="cta-form">
+      <input class="cta-input" type="text" placeholder="Your name">
+      <input class="cta-input" type="email" placeholder="Work email">
+      <input class="cta-input" type="text" placeholder="Company name">
+      <input class="cta-input" type="text" placeholder="Which department do you want to replace first?">
+      <button class="cta-submit">Build My Agent Army →</button>
+    </div>
+  </div>
+  <div class="cta-right">
+    <h2 class="cta-right-headline">WHY ONEUSER?</h2>
+    <ul class="guarantees">
+      <li>Agents deployed in 48 hours, guaranteed</li>
+      <li>97% average cost reduction vs. headcount</li>
+      <li>Zero onboarding. Zero HR. Zero churn.</li>
+      <li>Fully custom-built — not off-the-shelf chatbots</li>
+      <li>Integrates with your existing stack in days</li>
+      <li>SOC 2 compliant. Enterprise-grade security</li>
+      <li>Cancel any time. Fire us, not them.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">ONE<span>USER</span>.COM</div>
+  <div class="footer-copy">© 2025 OneUser.com — The AI Agent Factory. All roles automated.</div>
+  <div class="footer-copy">SPAIN · UK · USA · GLOBAL</div>
+</footer>
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => observer.observe(el));
+
+  // Agent card cycling
+  const cards = document.querySelectorAll('.agent-card');
+  let current = 0;
+  setInterval(() => {
+    cards.forEach((c, i) => {
+      c.classList.toggle('active', i <= current % 6);
+    });
+    current++;
+  }, 1200);
+</script>
+</body>
+</html>
